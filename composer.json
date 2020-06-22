@@ -1,0 +1,22 @@
+{
+    "name": "cyrhades/yoop",
+    "description": "Micro framework avec la PRO11",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cyrhades",
+            "email": "cyrhades76@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload" : {
+        "psr-4" : {
+            "Yoop\\" : "src/"
+        }
+    },
+    "require": {
+        "nikic/fast-route": "^1.3",
+        "twig/twig": "^3.0"
+    }
+}
