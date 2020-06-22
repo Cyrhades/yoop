@@ -8,7 +8,7 @@
 
     public function __construct() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 2) . '/templates');
+        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 4) . '/templates');
         $this->templateEngine = new \Twig\Environment($loader);
     }
 
