@@ -8,7 +8,10 @@
             "name": "Cyrhades",
             "email": "cyrhades76@gmail.com"
         }
-    ],
+    ],    
+    "autoload": {
+        "psr-4": { "Yoop\\": ["src/"] }
+    },
     "minimum-stability": "stable",
     "require": {
         "nikic/fast-route": "^1.3",
