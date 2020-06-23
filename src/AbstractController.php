@@ -11,6 +11,8 @@ abstract class AbstractController
 
     private $_session;
 
+    private $_flashbag;
+
     private $templateEngine;
 
     public function __construct() 
@@ -34,9 +36,12 @@ abstract class AbstractController
 
     protected function isSubmitted()
     {
-        var_dump($_POST['csrf_token']);
-        var_dump($this->_csrfToken);
-        return (sizeof($_POST) > 0 && !empty($_POST['csrf_token']) && $_POST['csrf_token'] === $this->_csrfToken);
+        if(sizeof($_POST) > 0 && !empty($_POST['csrf_token']) && $_POST['csrf_token'] === $this->_csrfToken) {
+            return true;
+        }
+
+        $this->errors = 'Erreur CSRF token !';
+        return false;
     }
 
     protected function session()
@@ -45,6 +50,20 @@ abstract class AbstractController
             $this->_session = new Session();
         }
         return $this->_session;
+    }
+
+    protected function flashbag()
+    {
+        if($this->_flashbag === null) {
+            $this->_flashbag = new FlashBag();
+        }
+        return $this->_flashbag;
+    }
+
+    protected function redirectToRoute(string $url)
+    {
+        header("location:".$url);
+        exit();
     }
 }
  
