@@ -19,6 +19,15 @@ class Session
     }
 
 
+    public function get(?string $name = null)
+    {
+        if($name === null) {
+            return $_SESSION;
+        }
+       
+        return $_SESSION[$name] ?? null;
+    }
+
     public function __get(string $name)
     {
         return $_SESSION[$name] ?? null;
