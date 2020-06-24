@@ -21,8 +21,12 @@ class Session
 
     public function get(?string $name = null)
     {
-        if($name === null) {
-            return $_SESSION;
+        if($name === '_flashbag') { 
+            return (new FlashBag)->get();
+        }
+        elseif($name === null) {
+            $session = array_merge($_SESSION, (new FlashBag)->get());
+            return $session;
         }
        
         return $_SESSION[$name] ?? null;
@@ -30,6 +34,9 @@ class Session
 
     public function __get(string $name)
     {
+        if($name === '_flashbag') { 
+           return (new FlashBag)->get();
+        }
         return $_SESSION[$name] ?? null;
     }
 

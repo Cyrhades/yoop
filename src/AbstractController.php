@@ -38,6 +38,7 @@ abstract class AbstractController
             $view.'.html.twig', 
             array_merge(
                 $vars,
+                //$this->flashbag()->get(),
                 $this->session()->get()
             )
         );
@@ -71,7 +72,7 @@ abstract class AbstractController
 
     protected function redirectToRoute(string $url)
     {
-        header("location:".$url);
+        header("Location: ".$url);
         exit();
     }
 }
