@@ -43,7 +43,6 @@ abstract class AbstractController
     {
         $data =  array_merge(
             $vars,
-            $this->flashbag()->get(),
             $this->session()->get(),
             [
                 'csrf_token' => $this->generateCsrfToken(),
@@ -90,4 +89,3 @@ abstract class AbstractController
         exit();
     }
 }
- 
