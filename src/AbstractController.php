@@ -97,4 +97,13 @@ abstract class AbstractController
             $this->redirectToRoute($url);
         }
     }
+
+    protected function isNotConnectedRedirect(string $url)
+    {
+        $user = $this->session()->get('user');
+        if((is_array($user) && isset($user['id']) && $user['id'] > 0) !== true) 
+        {
+            $this->redirectToRoute($url);
+        }
+    }
 }
