@@ -2,10 +2,15 @@
 
 namespace Yoop;
 
-session_start();
 abstract class AbstractController
 {
     protected $errors = [];
+
+    protected $templatesDirectory;
+
+    protected $uri;
+
+    protected $requestMethod;
 
     private $_csrfToken;
 
@@ -15,10 +20,12 @@ abstract class AbstractController
 
     private $templateEngine;
 
-    protected $templatesDirectory;
 
-    public function __construct() 
+    public function __construct($request = []) 
     {
+        $this->requestMethod = $request['requestMethod'];
+        $this->uri = $request['uri'];
+
         $this->templatesDirectory = dirname(__DIR__, 4) . '/templates';
         $loader = new \Twig\Loader\FilesystemLoader($this->templatesDirectory);
         $this->templateEngine = new \Twig\Environment($loader);
@@ -34,14 +41,21 @@ abstract class AbstractController
 
     protected function render($view, $vars = [])
     {
-        return $this->templateEngine->render(
-            $view.'.html.twig', 
-            array_merge(
-                $vars,
-                //$this->flashbag()->get(),
-                $this->session()->get()
-            )
+        $data =  array_merge(
+            $vars,
+            $this->flashbag()->get(),
+            $this->session()->get(),
+            [
+                'csrf_token' => $this->generateCsrfToken(),
+                'errors'     => $this->errors
+            ]
         );
+
+        if($this->requestMethod == 'POST') {
+            $data = array_merge($_POST, $data);
+        }
+        
+        return $this->templateEngine->render($view.'.html.twig', $data);
     }
 
     protected function isSubmitted()

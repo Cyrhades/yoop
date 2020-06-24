@@ -33,7 +33,7 @@ class Router
                     //on coupe sur l'operateur de resolution de portée (::)
                     // qui est symbolique ici dans notre chaine de caractere.
                     $route = explode('::', $routeInfo[1]);
-                    $method = [new $route[0], $route[1]];
+                    $method = [new $route[0](['requestMethod' => $requestMethod, 'uri' => rawurldecode($uri)]), $route[1]];
                 } else {
                     // sinon c'est directement la chaine qui nous interesse
                     $method = $routeInfo[1];
@@ -44,7 +44,7 @@ class Router
                 $method = $routeInfo[1];
             }
             // on execute avec call_user_func_array
-            echo call_user_func_array($method, $routeInfo[2]); 
+            echo call_user_func_array($method, array_merge($routeInfo[2], )); 
         }        
         elseif($routeInfo[0] == FastRoute\Dispatcher::NOT_FOUND){
             echo call_user_func([new ErrorHttpController, 'print_404']);
