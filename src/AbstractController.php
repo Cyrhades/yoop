@@ -15,9 +15,12 @@ abstract class AbstractController
 
     private $templateEngine;
 
+    protected $templatesDirectory;
+
     public function __construct() 
     {
-        $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 4) . '/templates');
+        $this->templatesDirectory = dirname(__DIR__, 4) . '/templates';
+        $loader = new \Twig\Loader\FilesystemLoader($this->templatesDirectory);
         $this->templateEngine = new \Twig\Environment($loader);
         $this->_csrfToken = $this->session()->securityCsrfToken;
     }
