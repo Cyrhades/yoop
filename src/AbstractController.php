@@ -88,4 +88,13 @@ abstract class AbstractController
         header("Location: ".$url);
         exit();
     }
+
+    protected function isConnectedRedirect(string $url)
+    {
+        $user = $this->session()->get('user');
+        if(is_array($user) && isset($user['id']) && $user['id'] > 0) 
+        {
+            $this->redirectToRoute($url);
+        }
+    }
 }

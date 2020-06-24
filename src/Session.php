@@ -19,6 +19,17 @@ class Session
     }
 
 
+
+    public function destroy(?string $name = null)
+    {
+        if($name === null) {
+            unset($_SESSION);
+        }
+        elseif(isset($_SESSION[$name])) {
+            unset($_SESSION[$name]);
+        }
+    }
+
     public function get(?string $name = null)
     {
         if($name === '_flashbag') { 
