@@ -106,4 +106,19 @@ abstract class AbstractController
             $this->redirectToRoute($url);
         }
     }
+
+    public function pathToUrl(string $path, bool $absolute = false)
+    {
+        $url = '';
+        if($absolute) {
+            $url = $this->getUrl();
+        } 
+        return $url.str_replace('\\','/',str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('/','\\', $path)));
+    }
+
+    public function getUrl()
+    {
+        $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https'?'https':'http';
+        return $protocol.'://'.$_SERVER["SERVER_NAME"].($_SERVER["SERVER_PORT"] != 80 ? ':'.$_SERVER["SERVER_PORT"] : '');
+    }
 }
