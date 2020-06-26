@@ -42,6 +42,7 @@ class Console
     
             if(!empty($sql)) {
                 $db->exec($sql);
+                echo "Création de la table \"$table\"\n";
             }
         }
     }
