@@ -38,12 +38,7 @@ class Console
                 }
             }
             $sql = $this->createRequestSQLForCreateTable($table, $fields, $index);
-     
-            $db = DatabaseMySql::getInstance(1,  [
-                'dsn' 		=> 'mysql:host=127.0.0.1;dbname=blog_test',
-                'login' 	=> 'root',
-                'password'	=> ''
-            ])->getDb(1);
+            $db = DatabaseMySql::getDb();
     
             if(!empty($sql)) {
                 $db->exec($sql);
