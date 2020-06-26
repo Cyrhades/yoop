@@ -45,8 +45,9 @@ abstract class AbstractController
             $vars,
             $this->session()->get(),
             [
-                'csrf_token' => $this->generateCsrfToken(),
-                'errors'     => $this->errors
+                'csrf_token'    => $this->generateCsrfToken(),
+                'errors'        => $this->errors,
+                'current_page'  => $_SERVER["PATH_INFO"]??'/'
             ]
         );
 
@@ -89,6 +90,21 @@ abstract class AbstractController
         exit();
     }
 
+    
+    public function isGranted(...$roles)
+    {
+        $user = $this->session()->get('user');
+
+        if(isset($user['roles'])) {
+            foreach($roles as $role)
+            {
+                if(in_array($role,$user['roles'])) return true;
+            }
+        }
+
+        $this->error401();
+    }
+
     protected function isConnectedRedirect(string $url)
     {
         $user = $this->session()->get('user');
@@ -120,5 +136,16 @@ abstract class AbstractController
     {
         $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https'?'https':'http';
         return $protocol.'://'.$_SERVER["SERVER_NAME"].($_SERVER["SERVER_PORT"] != 80 ? ':'.$_SERVER["SERVER_PORT"] : '');
+    }
+
+    private function error401()
+    {
+        header("HTTP/1.1 401 Unauthorized");
+        if(file_exists($this->templatesDirectory.'/errors/error_401.html.twig')) {
+            echo $this->render('errors/error_401');
+        } else {
+            echo '<h1>401 Unauthorized</h1>';
+        }
+        exit();
     }
 }
