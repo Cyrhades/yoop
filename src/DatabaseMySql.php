@@ -26,9 +26,10 @@ class DatabaseMySql {
 
     public static function getDb($dbName = 0) 
     {
-        if (!array_key_exists($dbName, self::$_instance)) {
+        if ($dbName == 0 && !array_key_exists($dbName, self::$_instance)) {
             self::getInstance($dbName);
         }
+       
         return self::$db[$dbName] ?? null;
     }
 
