@@ -35,6 +35,8 @@ class FormFileUpload extends FormBuilder
         // control de l'upload réussi
         if(!isset($file['error']) || $file['error'] != 0 || empty($file['name']) || empty($file['tmp_name'])) {
             $this->errors[] = 'L\'envoi du fichier a échoué.';
+            // inutile d'aller plus loin dans ce cas
+            return $this->errors;
         }
         // control le type de fichier
         if(empty($file['type']) || !array_key_exists(mime_content_type($file['tmp_name']), $this->typeAllowed)) {
