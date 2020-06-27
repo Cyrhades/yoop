@@ -105,10 +105,15 @@ abstract class AbstractController
         $this->error401();
     }
 
-    protected function isConnectedRedirect(string $url)
+    protected function isConnected()
     {
         $user = $this->session()->get('user');
-        if(is_array($user) && isset($user['id']) && $user['id'] > 0) 
+        return (is_array($user) && isset($user['id']) && $user['id'] > 0);
+    }
+
+    protected function isConnectedRedirect(string $url)
+    {
+        if($this->isConnected() === true)
         {
             $this->redirectToRoute($url);
         }
@@ -116,8 +121,7 @@ abstract class AbstractController
 
     protected function isNotConnectedRedirect(string $url)
     {
-        $user = $this->session()->get('user');
-        if((is_array($user) && isset($user['id']) && $user['id'] > 0) !== true) 
+        if($this->isConnected() !== true) 
         {
             $this->redirectToRoute($url);
         }
