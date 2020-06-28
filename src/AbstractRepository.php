@@ -82,7 +82,7 @@ abstract class AbstractRepository
      */
     private function findAnything(string $method, string $where = '', array $params = [], int $limit = 0, int $offset = 0)
     {
-        $property = str_replace(['find','get'],'', $method); 
+        $property = str_replace(['find','get','findOne','getOne'],'', $method); 
         $conn = $this->getEntityManager();
 
         $table = substr($this->entity, strrpos($this->entity, '\\')+1).'s';
@@ -92,7 +92,13 @@ abstract class AbstractRepository
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
         $query->execute($params);
      
-        return $query->fetchAll() ?? null;
+        if(strrpos($method, 'One')) {
+            return $query->fetch() ?? null;
+        }
+        else {
+            return $query->fetchAll() ?? null;
+        }
+
     }
 
 
