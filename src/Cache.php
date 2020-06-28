@@ -64,7 +64,7 @@ class Cache
         if($content === null) {
             $data = \call_user_func($data);
             if(!empty($data)) {
-               file_put_contents($this->cacheDirectory.$key.'_'.(time()+$expiration), $data);
+               file_put_contents($this->cacheDirectory.$key.'_'.(time()+$expiration), serialize($data));
                $content = $this->getItem($key);
             }
         }
@@ -83,7 +83,7 @@ class Cache
                 unlink($file[0]);
             }
             elseif(file_exists($file[0])) {
-                return file_get_contents($file[0]);
+                return unserialize(file_get_contents($file[0]));
             }
         }
         return null;

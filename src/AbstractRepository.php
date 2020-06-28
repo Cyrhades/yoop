@@ -25,6 +25,8 @@ abstract class AbstractRepository
            return $this->findByAnythingField($method, $params, true);
         } elseif(strpos($method, 'get') !== false || strpos($method, 'find') !== false) {
             return $this->findAnything($method, ...$params);
+        } elseif(strpos($method, 'count') !== false) {
+            return $this->countAnything($method, ...$params);
         }
     }
 
@@ -54,6 +56,24 @@ abstract class AbstractRepository
                 return $query->fetchAll() ?? null;
             }
         }
+    }
+
+    /**
+     * Cette méthode permet de gérer toute les types de requetes en count
+     */
+    private function countAnything(string $method, string $where = '', array $params = [], int $limit = 0, int $offset = 0)
+    {
+        $property = str_replace('count','', $method); 
+        $conn = $this->getEntityManager();
+
+        $table = substr($this->entity, strrpos($this->entity, '\\')+1).'s';
+        $where = $this->constructWhere($where, $limit, $offset);
+    
+        $query = $conn->prepare('SELECT count(*) AS count FROM `'.$table.'` '.$where);
+        $query->setFetchMode(\PDO::FETCH_ASSOC);
+        $query->execute($params);
+     
+        return $query->fetch()['count'] ?? 0;
     }
 
 

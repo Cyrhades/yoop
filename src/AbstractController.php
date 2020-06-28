@@ -27,9 +27,12 @@ abstract class AbstractController
         $this->uri = $request['uri'];
 
         $this->templatesDirectory = dirname(__DIR__, 4) . '/templates';
+        $this->rightsManager = new RightsManager();
+        $this->_csrfToken = $this->session()->securityCsrfToken;
+
         $loader = new \Twig\Loader\FilesystemLoader($this->templatesDirectory);
         $this->templateEngine = new \Twig\Environment($loader);
-        $this->_csrfToken = $this->session()->securityCsrfToken;
+        $this->templateEngine->addGlobal('rights', $this->rightsManager);
     }
 
     protected function generateCsrfToken()
@@ -93,22 +96,15 @@ abstract class AbstractController
     
     public function isGranted(...$roles)
     {
-        $user = $this->session()->get('user');
-
-        if(isset($user['roles'])) {
-            foreach($roles as $role)
-            {
-                if(in_array($role,$user['roles'])) return true;
-            }
+        if($this->rightsManager->isGranted(...$roles)) {
+            return true;
         }
-
         $this->error401();
     }
 
     protected function isConnected()
     {
-        $user = $this->session()->get('user');
-        return (is_array($user) && isset($user['id']) && $user['id'] > 0);
+        return $this->rightsManager->isConnected();
     }
 
     protected function isConnectedRedirect(string $url)
