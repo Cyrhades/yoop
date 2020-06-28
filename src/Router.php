@@ -47,10 +47,22 @@ class Router
             echo call_user_func_array($method, array_merge($routeInfo[2], )); 
         }        
         elseif($routeInfo[0] == FastRoute\Dispatcher::NOT_FOUND){
-            echo call_user_func([new ErrorHttpController, 'print_404']);
+            echo call_user_func([
+                new ErrorHttpController([
+                    'requestMethod' => $requestMethod, 
+                    'uri' => rawurldecode($uri)
+                ]), 
+                'print_404'            
+            ]);
         }
         elseif($routeInfo[0] == FastRoute\Dispatcher::METHOD_NOT_ALLOWED){
-            echo call_user_func([new ErrorHttpController, 'print_405']);
+            echo call_user_func([
+                new ErrorHttpController([
+                    'requestMethod' => $requestMethod, 
+                    'uri' => rawurldecode($uri)
+                ]), 
+                'print_405'            
+            ]);
         }
     }
 }

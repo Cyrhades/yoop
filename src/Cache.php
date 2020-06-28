@@ -47,7 +47,7 @@ class Cache
             ];
         }
 
-        return $data;
+        return $data??null;
     }
 
     /**
