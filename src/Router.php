@@ -12,7 +12,12 @@ class Router
 
     public function load($routes)
     {
-        $this->routes = include dirname(__DIR__,4).DIRECTORY_SEPARATOR.trim($routes,DIRECTORY_SEPARATOR);
+        $routeFileName = dirname(__DIR__,4).DIRECTORY_SEPARATOR.trim($routes,DIRECTORY_SEPARATOR);
+        if(file_exists($routeFileName)) {
+            $this->routes = include $routeFileName;
+        } else { 
+            throw new \Exception("Le fichier route n'a pas été trouvé. créez le fichier /app/routes.php");
+        }
     }
 
     public function run($requestMethod, $uri)
