@@ -11,7 +11,13 @@
     public function __construct() 
     {
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 4) . '/templates');
-        $this->templateEngine = new \Twig\Environment($loader);
+        // Si la variable .env est active on peut utiliser le debug dans twig
+        $this->templateEngine = new \Twig\Environment($loader, [
+            'debug' => (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev'),
+        ]);
+        if(isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
+            $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
+        }
         $this->flashbag = new FlashBag();
     }
 
