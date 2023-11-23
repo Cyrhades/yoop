@@ -56,6 +56,17 @@
     protected function connectUser(EntityInterface $user) {
         $_SESSION['user'] = $user;
     }
+
+    /**
+     * L'utilisateur connecté
+     */
+    protected function getUser(): ?EntityInterface {
+        if(!empty($_SESSION['user'])) {
+            return $_SESSION['user'];
+        }
+        return null;
+    }
+    
     
     /**
      * Connexion de l'utilisateur
