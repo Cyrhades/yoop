@@ -14,10 +14,9 @@
         // Si la variable .env est active on peut utiliser le debug dans twig
         $this->templateEngine = new \Twig\Environment($loader, [
             'debug' => (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev'),
-        ]);
-        if(isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev') {
-            $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
-        }
+        ]);        
+        $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
+        
         $this->flashbag = new FlashBag();
     }
 
