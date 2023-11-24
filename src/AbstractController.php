@@ -67,6 +67,14 @@
     }
     
     /**
+     * permet de vérifier qu'une valeur correspond à ce qui 
+     * est attendu sans afficher sa valeur (pour éviter la triche)
+     */
+    protected function isSecretData(string $data, string $secretValue): bool {
+        return (stripos(SHA1('HO_SECRET'.$data.'_DATA'), $secretValue) === 0);
+    }
+    
+    /**
      * Connexion de l'utilisateur
      */
     protected function isAuthenticated() {
