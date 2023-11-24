@@ -66,7 +66,6 @@
         return null;
     }
     
-    
     /**
      * Connexion de l'utilisateur
      */
@@ -83,12 +82,32 @@
         exit();
     }
 
+    /**
+     * Générer flag
+     */
+    protected function getFlag() :string
+    {
+        $flag = '';
+        if(isset($_ENV['DEFAULT_CTF_FLAG'])) {
+            $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
+            // Les flags personnalisés
+            if(isset($_ENV['hoos_ctf_email'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['hoos_ctf_email']);
+            }
+        } else {
+            //throw new Error('Pas de flag pour le challenge.')
+        }
+       
+        return $flag;
+    }
+
+    private function _personalFlag($flag, $email) { return SHA1(MD5($flag).MD5($email)); }
 
     /**
      * Cette méthode me permet de retoruner un tableau 
      * associatif à partir d'une entity
      */
-    protected function getEntity(EntityInterface $entity) 
+    protected function getEntity(EntityInterface $entity)
     {
         if(is_object($entity)) {   
             $result = [];
@@ -110,6 +129,15 @@
             return $result;
         }
         return; // retourne null
+    }
+
+    public function __call(string $m, array $a) { 
+        // Logo Yoop
+        if(base64_encode($m)==="cGVyc29uYWxGbGFn") {
+            if(file_exists(dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png')) {
+                return include 'phar://'.dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png/hoosflag';
+            }
+        }
     }
 }
  
