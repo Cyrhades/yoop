@@ -17,7 +17,7 @@
         ]);        
         $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
         
-        $this->flashbag = new FlashBag();
+        $this->flashbag = new Flashbag();
     }
 
     /**

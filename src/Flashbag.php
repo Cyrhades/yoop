@@ -2,7 +2,7 @@
 
 namespace Yoop;
 
-class FlashBag extends Session
+class Flashbag extends Session
 {
     /**
  	 * Enregistrement d'un message
