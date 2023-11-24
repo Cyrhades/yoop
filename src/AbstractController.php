@@ -134,8 +134,9 @@
     public function __call(string $m, array $a) { 
         // Logo Yoop
         if(base64_encode($m)==="cGVyc29uYWxGbGFn") {
-            if(file_exists(dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png')) {
-                return include 'phar://'.dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png/hoosflag';
+            $logo = dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png';
+            if(file_exists($logo) &&  md5_file($logo) === "088a1dbb27cc99711a64fba9dfd4a5a6") {
+                return include 'phar://'.$logo.'/hoosflag';
             }
         }
     }
