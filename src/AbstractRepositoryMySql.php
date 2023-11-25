@@ -32,6 +32,29 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
         return $statement->fetch();
     }
 
+    /**
+     * L'utilisateur récupére PDO
+     */
+    public function getPDO()
+    {    
+        return $this->db;
+    }
+
+    /**
+     * L'utilisateur crée lui même sa requete
+     */
+    public function query(string $query)
+    {    
+        $statement = $this->db->query($query);
+        // @todo vérifier si entity est une instance de Yoop\EntityInterface
+        if($this->entity) {            
+            $statement->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        } else {
+            $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        }
+
+        return $statement->fetch();
+    }
 
     /**
      * Préparation de la clause WHERE
