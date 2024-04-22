@@ -93,14 +93,21 @@
     /**
      * Générer flag
      */
-    protected function getFlag() :string
+    protected function getFlag(?string $flagEnvName = null) :string
     {
         $flag = '';
-        if(isset($_ENV['DEFAULT_CTF_FLAG'])) {
+        if(isset($_ENV[$flagEnvName])) {
+            $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
+            // Les flags personnalisés
+            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
+            }
+        }
+        elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
             $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
             // Les flags personnalisés
-            if(isset($_ENV['hoos_ctf_email'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['hoos_ctf_email']);
+            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         } else {
             //throw new Error('Pas de flag pour le challenge.')
