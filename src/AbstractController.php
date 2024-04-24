@@ -46,6 +46,11 @@
             if(!isset($vars['app']) || !is_array($vars['app'])) $vars['app'] = [];
             $vars['app']['user'] = $_SESSION['user'];
         }
+        if(isset($_SESSION['flashbag'])) {
+            if(!isset($vars['app']) || !is_array($vars['app'])) $vars['app'] = [];
+            $vars['app']['flashbag'] = $_SESSION['flashbag'];
+        }
+
         return $this->templateEngine->render($view.'.html.twig', $vars);
     }
 

@@ -20,7 +20,7 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
 
     public function findOneBy(array $filters = [])
     {    
-        $statement = $this->db->prepare('SELECT * FROM `'.$this->table.'`'.$this->whereClause($filters));
+        $statement = $this->db->prepare('SELECT * FROM `'.$this->table.'`'.$this->whereClause($filters).' LIMIT 1');
         $statement->execute($filters);
         // @todo vérifier si entity est une instance de Yoop\EntityInterface
         if($this->entity) {            
@@ -30,6 +30,20 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
         }
 
         return $statement->fetch();
+    }
+
+    public function findBy(array $filters = [])
+    {    
+        $statement = $this->db->prepare('SELECT * FROM `'.$this->table.'`'.$this->whereClause($filters));
+        $statement->execute($filters);
+        // @todo vérifier si entity est une instance de Yoop\EntityInterface
+        if($this->entity) {            
+            $statement->setFetchMode(\PDO::FETCH_CLASS, $this->entity);
+        } else {
+            $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        }
+
+        return $statement->fetchAll();
     }
 
     /**
