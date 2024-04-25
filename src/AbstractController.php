@@ -48,7 +48,7 @@
         }
         if(isset($_SESSION['flashbag'])) {
             if(!isset($vars['app']) || !is_array($vars['app'])) $vars['app'] = [];
-            $vars['app']['flashbag'] = $_SESSION['flashbag'];
+            $vars['app']['flashbag'] = $this->flash()->get();
         }
 
         return $this->templateEngine->render($view.'.html.twig', $vars);
