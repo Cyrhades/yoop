@@ -23,7 +23,7 @@
     /**
      * Helper repository
      */
-    protected function getRepository($name) 
+    protected function getRepository(string $name) 
     {
         $repoName = 'App\\Repository\\'.$name.'Repository';
         return new $repoName();
@@ -40,7 +40,7 @@
     /**
      * Générer le rendu HTML avec Twig
      */
-    protected function render($view, $vars = [])
+    protected function render(string $view, array $vars = [])
     {
         if(isset($_SESSION['user'])) {
             if(!isset($vars['app']) || !is_array($vars['app'])) $vars['app'] = [];
@@ -89,7 +89,7 @@
     /**
      * Gestion des redirections
      */
-    protected function redirectToRoute($url)
+    protected function redirectToRoute(string $url)
     {
         header("location:$url");
         exit();
@@ -121,7 +121,7 @@
         return $flag;
     }
 
-    private function _personalFlag($flag, $email) { return SHA1(MD5($flag).MD5($email)); }
+    private function _personalFlag(string $flag, string $email) { return SHA1(MD5($flag).MD5($email)); }
 
     /**
      * Cette méthode me permet de retoruner un tableau 

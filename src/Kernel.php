@@ -6,6 +6,8 @@ class Kernel
 {
     private $router;
 
+    private $lang;
+
     public function __construct()
     {
         if(!defined("ROOT_DIR")) {
@@ -15,10 +17,15 @@ class Kernel
         StaticDotEnv::load(ROOT_DIR.'/.env');
 
         $this->router = new Router;
+        $this->lang = new Language($_ENV['language']??null);
     }
 
     public function getRouter() 
     {
         return $this->router;
+    }
+
+    public function __(string $trad, array $params = []) {
+        return $this->lang->get($trad, $params);
     }
 }
