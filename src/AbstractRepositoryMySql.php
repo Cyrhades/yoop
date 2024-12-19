@@ -6,6 +6,9 @@ use Yoop\Database\MySql;
 
 abstract class AbstractRepositoryMySql extends AbstractRepository
 {
+    protected $table;
+    protected $entity;
+    
     public function __construct() {
         parent::__construct('mysql');
         $this->table = $this->repositoryToTableName();       
