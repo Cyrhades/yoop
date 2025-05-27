@@ -16,7 +16,8 @@
             'debug' => (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev'),
         ]);        
         $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
-        
+        $this->templateEngine->addExtension(new AbsoluteUrlTwigExtension());
+
         $this->flashbag = new Flashbag();
     }
 
