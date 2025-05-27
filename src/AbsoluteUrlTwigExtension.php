@@ -16,7 +16,7 @@ class AbsoluteUrlTwigExtension extends AbstractExtension
 
     public function absoluteUrl(string $path): string
     {
-        $baseUrl = $_SERVER['HTTP_REFERER'] ?? '';
+        $baseUrl = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'] ?? $_SERVER['HTTP_REFERER'] ?? '';
 
         // Nettoyage du path s’il commence par un /
         $path = ltrim($path, '/');
