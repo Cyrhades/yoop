@@ -16,7 +16,16 @@ class AbsoluteUrlTwigExtension extends AbstractExtension
 
     public function absoluteUrl(string $path): string
     {
-        $baseUrl = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+        $host = $_SERVER['SERVER_NAME'];
+        $port = $_SERVER['SERVER_PORT'];
+        
+        // Ajouter le port uniquement s'il est non standard
+        if (($protocol === "http://" && $port != 80) || ($protocol === "https://" && $port != 443)) {
+            $host .= ':' . $port;
+        }
+
+        $baseUrl = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'] ?? $protocol.$host ?? '';
 
         // Nettoyage du path s’il commence par un /
         $path = ltrim($path, '/');
