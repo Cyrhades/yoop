@@ -104,15 +104,23 @@
         $flag = '';
         if(isset($_ENV[$flagEnvName])) {
             $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
-            // Les flags personnalisés
-            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+            // Les flags personnalisés via proxy
+            if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
+                $flag = $this->personalFlag()($flag, $_SERVER['HTTP_X_FORWARDED_USERNAME']);
+            }
+            // Les flags personnalisés via app
+            elseif(isset($_ENV['HOOS_CTF_EMAIL'])) {                
                 $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         }
         elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
             $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
-            // Les flags personnalisés
-            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+            // Les flags personnalisés via proxy
+            if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
+                $flag = $this->personalFlag()($flag, $_SERVER['HTTP_X_FORWARDED_USERNAME']);
+            }
+            // Les flags personnalisés via app
+            elseif(isset($_ENV['HOOS_CTF_EMAIL'])) {                
                 $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         } else {
