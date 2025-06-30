@@ -99,7 +99,7 @@
     /**
      * Générer flag
      */
-       protected function getFlag(?string $flagEnvName = null) :string
+    protected function getFlag(?string $flagEnvName = null) :string
     {
         $flag = '';
         if(isset($_ENV[$flagEnvName])) {
@@ -126,7 +126,6 @@
         } else {
             //throw new Error('Pas de flag pour le challenge.')
         }
-         var_dump($flag); exit();
         return $flag;
     }
 
