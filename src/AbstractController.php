@@ -109,8 +109,8 @@
                 $flag = $this->personalFlag()($flag, $_SERVER['HTTP_X_FORWARDED_USERNAME']);
             }
             // Les flags personnalisés via app
-            elseif(isset($_ENV['HOOS_CTF_EMAIL'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
+            elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_USERNAME']);
             }
         }
         elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
@@ -120,8 +120,8 @@
                 $flag = $this->personalFlag()($flag, $_SERVER['HTTP_X_FORWARDED_USERNAME']);
             }
             // Les flags personnalisés via app
-            elseif(isset($_ENV['HOOS_CTF_EMAIL'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
+            elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_USERNAME']);
             }
         } else {
             //throw new Error('Pas de flag pour le challenge.')
