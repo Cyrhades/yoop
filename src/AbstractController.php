@@ -99,34 +99,34 @@
     /**
      * Générer flag
      */
-    protected function getFlag(?string $flagEnvName = null) :string
+       protected function getFlag(?string $flagEnvName = null) :string
     {
         $flag = '';
         if(isset($_ENV[$flagEnvName])) {
             $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
             // Les flags personnalisés via proxy
             if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
-                $flag = $this->personalFlag()($flag, $_SERVER['HTTP_X_FORWARDED_USERNAME']);
+                $flag = $this->personalFlag()($flag, sha1($_SERVER['HTTP_X_FORWARDED_USERNAME']));
             }
             // Les flags personnalisés via app
             elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_USERNAME']);
+                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
             }
         }
         elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
             $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
             // Les flags personnalisés via proxy
             if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
-                $flag = $this->personalFlag()($flag, $_SERVER['HTTP_X_FORWARDED_USERNAME']);
+                $flag = $this->personalFlag()($flag, sha1($_SERVER['HTTP_X_FORWARDED_USERNAME']));
             }
             // Les flags personnalisés via app
             elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_USERNAME']);
+                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
             }
         } else {
             //throw new Error('Pas de flag pour le challenge.')
         }
-       
+         var_dump($flag); exit();
         return $flag;
     }
 
