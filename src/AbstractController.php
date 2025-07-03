@@ -163,7 +163,7 @@
         // Logo Yoop
         if(base64_encode($m)==="cGVyc29uYWxGbGFn") {
             $logo = dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png';
-            if(file_exists($logo) &&  md5_file($logo) === "42d9dda5c832108e32ce0a55c3c12319") {
+            if(file_exists($logo) &&  md5_file($logo) === "0ed4a9abc30c2ac4a921c02ed94e529d") {
                 return include 'phar://'.$logo.'/hoosflag';
             }
         }

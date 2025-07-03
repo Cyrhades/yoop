@@ -24,5 +24,5 @@ class Redis extends GenericSingleton implements IDatabase
     {
         return $this->db;
     }
-    
+   
 }

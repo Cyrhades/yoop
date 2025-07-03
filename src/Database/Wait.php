@@ -2,7 +2,6 @@
 
 namespace Yoop\Database;
 
-
 class Wait
 {
     private $waitHtml = <<<WAIT

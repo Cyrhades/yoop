@@ -86,7 +86,6 @@ class Console {
                 $this->messageShell("info", "Pensez à ajouter la route dans votre fichier ./app/routes.php\n".$route);
     }
 
-
     /**
      * help, affichage de l'aide
      */
