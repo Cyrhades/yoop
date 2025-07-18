@@ -24,8 +24,13 @@ class AbsoluteUrlTwigExtension extends AbstractExtension
         if (($protocol === "http://" && $port != 80) || ($protocol === "https://" && $port != 443)) {
             $host .= ':' . $port;
         }
-
-        $baseUrl = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'] ?? $protocol.$host ?? '';
+        // ajout vérification des caracteres autorisés pour l'alias
+        $proxyHttp = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'] ?? '';
+        if (preg_match('/^[a-zA-Z0-9_-]+$/', $proxyHttp)) {
+            $baseUrl = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'];
+        } else {
+            $baseUrl = $protocol.$host ?? '';
+        }
 
         // Nettoyage du path s’il commence par un /
         $path = ltrim($path, '/');
