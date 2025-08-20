@@ -60,7 +60,7 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
     /**
      * L'utilisateur crée lui même sa requete
      */
-    public function query(string $query)
+    public function query(string $query, bool $all = false)
     {    
         $statement = $this->db->query($query);
         // @todo vérifier si entity est une instance de Yoop\EntityInterface
@@ -70,9 +70,13 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
             $statement->setFetchMode(\PDO::FETCH_ASSOC);
         }
 
-        return $statement->fetch();
+        if($all) {
+            return $statement->fetchAll();
+        } else {
+            return $statement->fetch();
+        }
     }
-
+    
     /**
      * Préparation de la clause WHERE
      */
