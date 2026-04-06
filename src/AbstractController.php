@@ -23,7 +23,6 @@ abstract class AbstractController
         $this->flashbag = new Flashbag();
 
         $this->csp = new ContentSecurityPolicy();
-        var_dump($this->csp);
     }
 
     /**
