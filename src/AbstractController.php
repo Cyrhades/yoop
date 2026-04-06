@@ -1,12 +1,15 @@
 <?php
  
- namespace Yoop;
-  
- abstract class AbstractController
- {
+namespace Yoop;
+
+abstract class AbstractController
+{
     private $templateEngine;
 
     private $flashbag;
+
+    private $csp;
+
 
     public function __construct() 
     {
@@ -16,9 +19,11 @@
             'debug' => (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev'),
         ]);        
         $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
-        $this->templateEngine->addExtension(new AbsoluteUrlTwigExtension());
-
+        
         $this->flashbag = new Flashbag();
+
+        $this->csp = new ContentSecurityPolicy();
+        var_dump($this->csp);
     }
 
     /**
@@ -43,6 +48,15 @@
      */
     protected function render(string $view, array $vars = [])
     {
+        if($this->csp!==null) {
+            foreach ($this->csp->getCSP() as $key => $value) {
+                header($key . ': ' . $value);
+            }
+
+            //$vars['csp_nonce'] = $this->csp->getCurrentNonce();
+            $this->templateEngine->addGlobal('csp_nonce', $this->csp->getCurrentNonce());
+        }
+
         if(isset($_SESSION['user'])) {
             if(!isset($vars['app']) || !is_array($vars['app'])) $vars['app'] = [];
             $vars['app']['user'] = $_SESSION['user'];
@@ -104,28 +118,21 @@
         $flag = '';
         if(isset($_ENV[$flagEnvName])) {
             $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
-            // Les flags personnalisés via proxy
-            if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
-                $flag = $this->personalFlag()($flag, sha1($_SERVER['HTTP_X_FORWARDED_USERNAME']));
-            }
-            // Les flags personnalisés via app
-            elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
+            // Les flags personnalisés
+            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         }
         elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
             $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
-            // Les flags personnalisés via proxy
-            if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
-                $flag = $this->personalFlag()($flag, sha1($_SERVER['HTTP_X_FORWARDED_USERNAME']));
-            }
-            // Les flags personnalisés via app
-            elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
+            // Les flags personnalisés
+            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         } else {
             //throw new Error('Pas de flag pour le challenge.')
         }
+       
         return $flag;
     }
 
@@ -163,7 +170,7 @@
         // Logo Yoop
         if(base64_encode($m)==="cGVyc29uYWxGbGFn") {
             $logo = dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png';
-            if(file_exists($logo) &&  md5_file($logo) === "0ed4a9abc30c2ac4a921c02ed94e529d") {
+            if(file_exists($logo) &&  md5_file($logo) === "088a1dbb27cc99711a64fba9dfd4a5a6") {
                 return include 'phar://'.$logo.'/hoosflag';
             }
         }
