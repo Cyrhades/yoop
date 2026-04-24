@@ -17,7 +17,7 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
 
         // Vérification du nom de la table avec la regex
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $this->table) || strlen($this->table) > 64) {
-            throw new Error("Nom de votre table incorrecte");
+            throw new \Error("Nom de votre table incorrecte");
         } 
     }
 
