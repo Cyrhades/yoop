@@ -115,7 +115,6 @@ class ContentSecurityPolicy
         return false;
     }
 
-
     private function buildCSPString(): string
     {
         $parts = [];

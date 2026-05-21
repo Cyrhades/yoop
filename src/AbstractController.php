@@ -13,6 +13,9 @@ abstract class AbstractController
 
     public function __construct() 
     {
+        global $kernel;
+        $this->csp = $kernel->contentSecurityPolicy();
+
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 4) . '/templates');
         // Si la variable .env est active on peut utiliser le debug dans twig
         $this->templateEngine = new \Twig\Environment($loader, [
@@ -29,10 +32,10 @@ abstract class AbstractController
             })
         );
 
-        $this->flashbag = new Flashbag();
-
-        $this->csp = new ContentSecurityPolicy();
+        $this->flashbag = new Flashbag();        
     }
+
+
 
     /**
      * Helper repository
@@ -61,7 +64,6 @@ abstract class AbstractController
                 header($key . ': ' . $value);
             }
 
-            //$vars['csp_nonce'] = $this->csp->getCurrentNonce();
             $this->templateEngine->addGlobal('csp_nonce', $this->csp->getCurrentNonce());
         }
 
