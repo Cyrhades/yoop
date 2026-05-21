@@ -20,6 +20,15 @@ abstract class AbstractController
         ]);        
         $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
         
+        // Fonction de traduction Twig
+        $this->templateEngine->addFunction(
+            new \Twig\TwigFunction('__', function (string $trad, array $params = []) {
+                global $kernel;
+
+                return $kernel->__($trad, $params);
+            })
+        );
+
         $this->flashbag = new Flashbag();
 
         $this->csp = new ContentSecurityPolicy();
