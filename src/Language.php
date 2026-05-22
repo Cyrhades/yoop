@@ -20,15 +20,42 @@ class Language {
         } 
     }
 
-    public function get(string $trad, array $params = []) {
-        if(isset($this->traductions[$trad])) {
+    public function get(string $trad, array $params = [])
+    {
+        $message = null;
+
+        // Vérifie d'abord si la clé complète existe directement
+        if (isset($this->traductions[$trad])) {
             $message = $this->traductions[$trad];
         } else {
+            // Sinon on tente un accès imbriqué via les points
+            $keys = explode('.', $trad);
+
+            $current = $this->traductions;
+            $found = true;
+
+            foreach ($keys as $key) {
+                if (is_array($current) && isset($current[$key])) {
+                    $current = $current[$key];
+                } else {
+                    $found = false;
+                    break;
+                }
+            }
+
+            if ($found && is_string($current)) {
+                $message = $current;
+            }
+        }
+
+        // Fallback si aucune traduction trouvée
+        if ($message === null) {
             $message = $trad;
         }
-        
+
+        // Remplacement des placeholders
         foreach ($params as $placeholder => $value) {
-            $message = str_replace('{{'.$placeholder.'}}', $value, $message);
+            $message = str_replace('{{' . $placeholder . '}}', $value, $message);
         }
 
         return $message;
