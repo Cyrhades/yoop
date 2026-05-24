@@ -18,6 +18,7 @@ class ContentSecurityPolicy
         'img-src'     => ["'self'"],
         'frame-src'   => ["'self'"],
         'connect-src' => ["'self'"],
+        'worker-src' => ["'self'"],
     ];
 
     public function getCurrentNonce(): string
@@ -38,7 +39,6 @@ class ContentSecurityPolicy
     {
         $this->strictMode = $strict;
     }
-
 
     public function addScriptSrc(array $urls): void
     {
@@ -69,6 +69,12 @@ class ContentSecurityPolicy
     {
         $this->addAuthorizedCSP('connect-src', $urls);
     }
+
+    public function addWorkerSrc(array $urls): void
+    {
+        $this->addAuthorizedCSP('worker-src', $urls);
+    }
+
 
     public function addAuthorizedCSP(string $type, array $addresses): void
     {
@@ -118,18 +124,18 @@ class ContentSecurityPolicy
     private function buildCSPString(): string
     {
         $parts = [];
-
         foreach ($this->policies as $directive => $values) {
-
             // MODE STRICT
             if ($this->strictMode && in_array($directive, ['script-src', 'style-src'])) {
                 // enlève unsafe-inline si strict
                 $values = array_filter($values, fn($v) => $v !== "'unsafe-inline'");
             }
 
-            // Ajout nonce automatique
-            if (in_array($directive, ['script-src', 'style-src'])) {
-                $values[] = "'nonce-" . $this->getCurrentNonce() . "'";
+            // Ajout nonce automatique (possible que si strict actif)
+            if ($this->strictMode) {
+                if (in_array($directive, ['script-src', 'style-src'])) {
+                    $values[] = "'nonce-" . $this->getCurrentNonce() . "'";
+                }
             }
 
             $values = array_unique($values);
