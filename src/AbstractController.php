@@ -35,6 +35,10 @@ abstract class AbstractController
         $this->flashbag = new Flashbag();        
     }
 
+    public function getTemplateEngine()
+    {
+        return $this->templateEngine;
+    }
 
 
     /**
