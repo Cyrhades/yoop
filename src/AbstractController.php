@@ -134,20 +134,20 @@ abstract class AbstractController
             $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
             // Les flags personnalisés
             if(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_USERNAME']);
+                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
             }
             elseif(isset($_ENV['HOOS_CTF_EMAIL'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
+                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_EMAIL']));
             }
         }
         elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
             $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
             // Les flags personnalisés
             if(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_USERNAME']);
+                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
             }
             elseif(isset($_ENV['HOOS_CTF_EMAIL'])) {                
-                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
+                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_EMAIL']));
             }
         } else {
             //throw new Error('Pas de flag pour le challenge.')
