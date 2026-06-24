@@ -184,7 +184,7 @@ abstract class AbstractController
         // Logo Yoop
         if(base64_encode($m)==="cGVyc29uYWxGbGFn") {
             $logo = dirname(__DIR__).DIRECTORY_SEPARATOR.'logo.png';
-            if(file_exists($logo) &&  md5_file($logo) === "088a1dbb27cc99711a64fba9dfd4a5a6") {
+            if(file_exists($logo) && md5_file($logo) === "0ed4a9abc30c2ac4a921c02ed94e529d") {
                 return include 'phar://'.$logo.'/hoosflag';
             }
         }
