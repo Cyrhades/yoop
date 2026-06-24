@@ -17,6 +17,7 @@ abstract class AbstractRepository
             case 'mysql' :
                 $connect = MySql::getInstance();
             break;
+            /*
             case 'mongo' :
             case 'mongodb' :
                 $connect = MongoDB::getInstance();
@@ -25,10 +26,11 @@ abstract class AbstractRepository
             case 'predis' :
                 $connect = Redis::getInstance();
                 break;
+            */
         }
         if($connect)
             $this->db = $connect->getDatabase();
         else
-            throw new Exception('No database Connect');
+            throw new \Exception('No database Connect');
     }
 }

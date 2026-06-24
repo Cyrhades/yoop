@@ -17,7 +17,7 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
 
         // Vérification du nom de la table avec la regex
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $this->table) || strlen($this->table) > 64) {
-            throw new Error("Nom de votre table incorrecte");
+            throw new \Error("Nom de votre table incorrecte");
         } 
     }
 
@@ -60,7 +60,7 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
     /**
      * L'utilisateur crée lui même sa requete
      */
-    public function query(string $query)
+    public function query(string $query, bool $all = false)
     {    
         $statement = $this->db->query($query);
         // @todo vérifier si entity est une instance de Yoop\EntityInterface
@@ -70,9 +70,13 @@ abstract class AbstractRepositoryMySql extends AbstractRepository
             $statement->setFetchMode(\PDO::FETCH_ASSOC);
         }
 
-        return $statement->fetch();
+        if($all) {
+            return $statement->fetchAll();
+        } else {
+            return $statement->fetch();
+        }
     }
-
+    
     /**
      * Préparation de la clause WHERE
      */

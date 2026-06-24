@@ -8,6 +8,8 @@ class Kernel
 
     private $lang;
 
+    private $csp;
+
     public function __construct()
     {
         if(!defined("ROOT_DIR")) {
@@ -18,6 +20,12 @@ class Kernel
 
         $this->router = new Router;
         $this->lang = new Language($_ENV['language']??null);
+        $this->csp = new ContentSecurityPolicy();
+    }
+
+    public function contentSecurityPolicy() 
+    {
+        return $this->csp;
     }
 
     public function getRouter() 

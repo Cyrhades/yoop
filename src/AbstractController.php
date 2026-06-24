@@ -1,25 +1,45 @@
 <?php
  
- namespace Yoop;
-  
- abstract class AbstractController
- {
+namespace Yoop;
+
+abstract class AbstractController
+{
     private $templateEngine;
 
     private $flashbag;
 
+    private $csp;
+
+
     public function __construct() 
     {
+        global $kernel;
+        $this->csp = $kernel->contentSecurityPolicy();
+
         $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__, 4) . '/templates');
         // Si la variable .env est active on peut utiliser le debug dans twig
         $this->templateEngine = new \Twig\Environment($loader, [
             'debug' => (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'dev'),
         ]);        
         $this->templateEngine->addExtension(new \Twig\Extension\DebugExtension());
-        $this->templateEngine->addExtension(new AbsoluteUrlTwigExtension());
+        
+        // Fonction de traduction Twig
+        $this->templateEngine->addFunction(
+            new \Twig\TwigFunction('__', function (string $trad, array $params = []) {
+                global $kernel;
 
-        $this->flashbag = new Flashbag();
+                return $kernel->__($trad, $params);
+            })
+        );
+
+        $this->flashbag = new Flashbag();        
     }
+
+    public function getTemplateEngine()
+    {
+        return $this->templateEngine;
+    }
+
 
     /**
      * Helper repository
@@ -43,6 +63,14 @@
      */
     protected function render(string $view, array $vars = [])
     {
+        if($this->csp!==null) {
+            foreach ($this->csp->getCSP() as $key => $value) {
+                header($key . ': ' . $value);
+            }
+
+            $this->templateEngine->addGlobal('csp_nonce', $this->csp->getCurrentNonce());
+        }
+
         if(isset($_SESSION['user'])) {
             if(!isset($vars['app']) || !is_array($vars['app'])) $vars['app'] = [];
             $vars['app']['user'] = $_SESSION['user'];
@@ -104,28 +132,21 @@
         $flag = '';
         if(isset($_ENV[$flagEnvName])) {
             $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
-            // Les flags personnalisés via proxy
-            if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
-                $flag = $this->personalFlag()($flag, sha1($_SERVER['HTTP_X_FORWARDED_USERNAME']));
-            }
-            // Les flags personnalisés via app
-            elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
+            // Les flags personnalisés
+            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         }
         elseif(isset($_ENV['DEFAULT_CTF_FLAG'])) {
             $flag = SHA1($_ENV['DEFAULT_CTF_FLAG'].'-CTF-YOOP-Fl@g');
-            // Les flags personnalisés via proxy
-            if(isset($_SERVER['HTTP_X_FORWARDED_USERNAME'])) {
-                $flag = $this->personalFlag()($flag, sha1($_SERVER['HTTP_X_FORWARDED_USERNAME']));
-            }
-            // Les flags personnalisés via app
-            elseif(isset($_ENV['HOOS_CTF_USERNAME'])) {                
-                $flag = $this->personalFlag()($flag, sha1($_ENV['HOOS_CTF_USERNAME']));
+            // Les flags personnalisés
+            if(isset($_ENV['HOOS_CTF_EMAIL'])) {                
+                $flag = $this->personalFlag()($flag, $_ENV['HOOS_CTF_EMAIL']);
             }
         } else {
             //throw new Error('Pas de flag pour le challenge.')
         }
+       
         return $flag;
     }
 

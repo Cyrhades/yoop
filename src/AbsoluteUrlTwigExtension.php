@@ -26,7 +26,7 @@ class AbsoluteUrlTwigExtension extends AbstractExtension
         }
         // ajout vérification des caracteres autorisés pour l'alias
         $proxyHttp = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'] ?? '';
-        if (preg_match('/^[a-zA-Z0-9_-]+$/', $proxyHttp)) {
+        if (preg_match('/^[\/a-zA-Z0-9_-]+$/', $proxyHttp)) {
             $baseUrl = $_SERVER['HTTP_X_FORWARDED_PREFIX_PROXY'];
         } else {
             $baseUrl = $protocol.$host ?? '';
