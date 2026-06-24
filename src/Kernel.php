@@ -2,7 +2,7 @@
 
 namespace Yoop;
 
-class Kernel 
+class Kernel
 {
     private $router;
 
@@ -12,28 +12,29 @@ class Kernel
 
     public function __construct()
     {
-        if(!defined("ROOT_DIR")) {
-            define("ROOT_DIR", dirname(__DIR__,4));
+        if (!defined("ROOT_DIR")) {
+            define("ROOT_DIR", dirname(__DIR__, 4));
         }
 
-        StaticDotEnv::load(ROOT_DIR.'/.env');
+        StaticDotEnv::load(ROOT_DIR . '/.env');
 
         $this->router = new Router;
-        $this->lang = new Language($_ENV['language']??null);
+        $this->lang = new Language($_ENV["LANGUAGE"] ?? null);
         $this->csp = new ContentSecurityPolicy();
     }
 
-    public function contentSecurityPolicy() 
+    public function contentSecurityPolicy()
     {
         return $this->csp;
     }
 
-    public function getRouter() 
+    public function getRouter()
     {
         return $this->router;
     }
 
-    public function __(string $trad, array $params = []) {
+    public function __(string $trad, array $params = [])
+    {
         return $this->lang->get($trad, $params);
     }
 }
