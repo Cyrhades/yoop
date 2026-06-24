@@ -26,7 +26,9 @@ class MySql extends GenericSingleton implements IDatabase
             // todo : gérer via uri type mysql://root:pass@localhost:3306/dbname
         }
         if($dsn !== null) {
-            $this->db = new PDO($dsn, $username, $password);
+            $this->db = new PDO($dsn, $username, $password, [
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
+            ]);
         }
     }
 
