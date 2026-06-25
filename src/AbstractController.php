@@ -186,7 +186,7 @@ abstract class AbstractController
         return; // retourne null
     }
 
-    protected function callBot(string $dataCall)
+    protected function callBot(array $dataCall = [])
     {
         $botTarget = $_ENV['BOT'] ?? 'botserver';
         $client = new \WebSocket\Client("ws://" . $botTarget . ":8282");
