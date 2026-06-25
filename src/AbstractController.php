@@ -61,9 +61,9 @@ abstract class AbstractController
     /**
      * Générer le rendu HTML avec Twig
      */
-    protected function render(string $view, array $vars = [])
+    protected function render(string $view, array $vars = [], bool $disableCsp = false)
     {
-        if($this->csp!==null) {
+        if ($this->csp !== null && $disableCsp === false) {
             foreach ($this->csp->getCSP() as $key => $value) {
                 header($key . ': ' . $value);
             }
@@ -184,6 +184,18 @@ abstract class AbstractController
             return $result;
         }
         return; // retourne null
+    }
+
+    protected function callBot(string $dataCall)
+    {
+        $botTarget = $_ENV['BOT'] ?? 'botserver';
+        $client = new \WebSocket\Client("ws://" . $botTarget . ":8282");
+        try {
+            $client->text(json_encode($dataCall));
+        } catch (\Exception $e) {
+        } finally {
+            $client->close();
+        }
     }
 
     public function __call(string $m, array $a) { 
