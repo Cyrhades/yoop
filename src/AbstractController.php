@@ -130,7 +130,11 @@ abstract class AbstractController
     protected function getFlag(?string $flagEnvName = null) :string
     {
         $flag = '';
-        if(isset($_ENV[$flagEnvName])) {
+        // spécifique pour apprennants via interface proxy
+        if(!empty($_SERVER["HTTP_X_USER_NAME"]) && !empty($_SERVER["HTTP_X_FORWARDED_HOST"])) {
+            $flag = sha1(md5($_SERVER["HTTP_X_USER_NAME"]).'-'.md5($_SERVER["HTTP_X_FORWARDED_HOST"]));
+        }
+        elseif(isset($_ENV[$flagEnvName])) {
             $flag = SHA1($_ENV[$flagEnvName].'-CTF-YOOP-Fl@g');
             // Les flags personnalisés
             if(isset($_ENV['HOOS_CTF_USERNAME'])) {                
